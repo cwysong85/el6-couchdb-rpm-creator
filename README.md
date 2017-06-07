@@ -99,7 +99,7 @@ Then you'll need to create a new `build.sh` file for the build process. Here's a
 DIR=$(pwd)
 LIBS="$DIR/build_versions/2.0.0/libs"
 BUILD="$DIR/build"
-BUILD_DEPS="wget autoconf autoconf-archive automake ncurses-devel curl-devel help2man libicu-devel libtool perl-Test-Harness openssl-devel"
+# BUILD_DEPS="esl-erlang-19.2 wget autoconf autoconf-archive automake ncurses-devel curl-devel help2man libicu-devel libtool perl-Test-Harness openssl-devel"
 FILE_EXT=".tar.gz"
 
 COUCHDB_FILE="apache-couchdb-2.0.0"
@@ -108,12 +108,16 @@ COUCHDB_URL="$LIBS/$COUCHDB_FILE$FILE_EXT"
 SPIDER_FILE="js185-1.0.0"
 SPIDER_URL="$LIBS/$SPIDER_FILE$FILE_EXT"
 
-rpm -ivh erlang/esl-erlang-19.2-1.x86_64.rpm
+# Add erlang repo
+wget https://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
+rm erlang-solutions-1.0-1.noarch.rpm
 
+yum clean all
 yum groupinstall -y "Development Tools"
-yum install -y $BULID_DEPS
+yum install -y esl-erlang-19.2 wget autoconf autoconf-archive automake ncurses-devel curl-devel help2man libicu-devel libtool perl-Test-Harness openssl-devel
 
-mkdir build
+mkdir -p $BUILD
 tar -xvf $LIBS/$SPIDER_FILE$FILE_EXT -C $BUILD
 tar -xvf $LIBS/$COUCHDB_FILE$FILE_EXT -C $BUILD
 
@@ -133,13 +137,20 @@ Then create a `gruntScript.js` file for the RPM build process. Here's an example
 module.exports = {
     // When RPM installs on target machine, these scripts are ran
     installScripts: {
+        preInstallScript: [],
         postInstallScript: [
             "groupadd 'CouchDB-Administrator'",
             "adduser --system --no-create-home --shell /bin/bash --group 'CouchDB-Administrator' couchdb",
             "chown -R couchdb:couchdb /opt/couchdb",
             "chmod 0644 /opt/couchdb/etc/*"
-        ]
+        ],
+        preUninstallScript: [],
+        postUninstallScript: []
     },
+
+    // An array of packages that this package depends
+    // ** Include esl-erlang version here **
+    requires: ['esl-erlang >= 19.2'],
 
     // When the RPM build process occurs, these files are added to the RPM
     // see https://www.npmjs.com/package/grunt-easy-rpm for more info
