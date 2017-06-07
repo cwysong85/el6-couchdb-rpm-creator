@@ -1,0 +1,12 @@
+{
+  "name": "el6-couchdb-rpm-creator",
+  "version": "0.0.1",
+  "description": "A simple NodeJS Grunt script that creates Couchdb 1.6.1 and 2.0.0 RPMs for CentOS 6",
+  "author": "Corey Wysong",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-easy-rpm": "^1.5.4",
+    "grunt-run": "^0.7.0"
+  }
+}
