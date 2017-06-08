@@ -34,7 +34,11 @@ service couchdb {start|force-start|stop|force-start|force-stop|status|restart}
 ```
 
 ### Logs
-The CouchDB logs are located under the `/var/log` directory. There are two logs, stderr and stdout.
+#### 1.6.1
+The logs are located under the `/opt/couchdb/var/log/couchdb` directory.
+
+#### 2.0.0
+The logs are located under the `/var/log` directory. There are two logs, stderr and stdout.
 
 ### Couch Web UI
 After configuring and starting the CouchDB service, you should be able to view the Web UI by visiting the IP of your CouchDB on a web browser:
@@ -42,7 +46,7 @@ After configuring and starting the CouchDB service, you should be able to view t
 http://[CouchDB-IP]:5984/_utils
 ```
 
-If you are on version 2.0.0, you can click the "Verify" button to verify the installation.
+You can verify the CouchDB installation by clicking on the "Verify Installation" link (on 1.6.1) or by clicking on the the "Verify" button (on 2.0.0).
 
 ## Development
 ### Build a new CouchDB version
@@ -176,14 +180,14 @@ module.exports = {
 ```
 
 #### Build the CouchDB RPM
-Build the latest version:
+Build the latest CouchDB version (2.0.0):
 ```
 grunt build
 ```
 
 Or build a specific version:
 ```
-grunt build --version [build_version]
+grunt build --target=[build_version]
 ```
 
 ### Contribution
